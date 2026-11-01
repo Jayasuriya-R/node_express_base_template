@@ -3,7 +3,8 @@ const express = require('express')
 const {serverConfig,logger} = require("./config")
 
 const app = express()
-
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 const apiRouter = require("./routes")
 
 app.use ('/api',apiRouter)
