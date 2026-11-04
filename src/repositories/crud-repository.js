@@ -1,5 +1,7 @@
 
-const {Logger} = require('../config')
+const {logger} = require('../config');
+const {StatusCodes}=require('http-status-codes')
+const AppError = require('../utils/errors/app-error');
 
 class CrudRepository{
     constructor(model){
@@ -11,7 +13,7 @@ class CrudRepository{
             const response = await this.model.creat(data);
             return response
         } catch (error) {
-            Logger.error('Something went wrong in the Crud Repo:create');
+            logger.error('Something went wrong in the Crud Repo:create');
             throw error;
         }
     }
@@ -23,9 +25,12 @@ class CrudRepository{
                     id:data
                 }
             });
+            if(!response){
+                throw new AppError("Requested resource not found",StatusCodes.NOT_FOUND)
+            }
             return response
         } catch (error) {
-            Logger.error('Something went wrong in the Crud Repo:destroy');
+            logger.error('Something went wrong in the Crud Repo:destroy');
             throw error;
         }
     }
@@ -33,9 +38,12 @@ class CrudRepository{
      async get(data){
         try {
             const response = await this.model.findByPk(data);
+            if(!response){
+                throw new AppError("Requested resource not found",StatusCodes.NOT_FOUND)
+            }
             return response
         } catch (error) {
-            Logger.error('Something went wrong in the Crud Repo:get');
+            logger.error('Something went wrong in the Crud Repo:get');
             throw error;
         }
     }
@@ -45,7 +53,7 @@ class CrudRepository{
             const response = await this.model.findAll();
             return response
         } catch (error) {
-            Logger.error('Something went wrong in the Crud Repo:getAll');
+            logger.error('Something went wrong in the Crud Repo:getAll');
             throw error;
         }
     }
@@ -57,9 +65,12 @@ class CrudRepository{
                     id:id
                 }
             });
+            if(response[0] === 0){
+                throw new AppError("Requested resource not found",StatusCodes.NOT_FOUND)
+            }
             return response
         } catch (error) {
-            Logger.error('Something went wrong in the Crud Repo:update');
+            logger.error('Something went wrong in the Crud Repo:update');
             throw error;
         }
     }
