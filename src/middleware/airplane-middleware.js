@@ -1,6 +1,7 @@
 const {StatusCodes} = require('http-status-codes')
 const {ErrorResponse} = require('../utils/common')
 const AppError = require('../utils/errors/app-error')
+
 function validateCreateAirplane(req,res,next){
     const incommingFields = Object.keys(req.body)
     ErrorResponse.error =  new AppError(['No data found in the incoming request'],StatusCodes.BAD_REQUEST)
